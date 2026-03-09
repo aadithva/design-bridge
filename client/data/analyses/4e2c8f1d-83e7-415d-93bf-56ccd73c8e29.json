@@ -1,0 +1,532 @@
+{
+  "id": "4e2c8f1d-83e7-415d-93bf-56ccd73c8e29",
+  "status": "completed",
+  "createdAt": "2026-03-09T12:10:28.985Z",
+  "figmaUrl": "https://www.figma.com/design/VTbw5OsfmK4jWG4NnGvzZ1",
+  "figmaPageName": "Cover",
+  "prTitle": "Add HTML rendering support to Copilot Briefs",
+  "prId": 4927651,
+  "adoProject": "Office",
+  "repoName": "",
+  "components": [
+    {
+      "componentName": "Status",
+      "figmaNodeId": "1:606",
+      "figmaPath": "Cover > Cover > Status",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "24px",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Status",
+      "figmaNodeId": "1:606",
+      "figmaPath": "Cover > Cover > Status",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "100%",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "100%",
+          "severity": "warning",
+          "component": "Loop",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [
+        {
+          "property": "maxWidth",
+          "figmaValue": "64px",
+          "codeValue": "708px",
+          "severity": "info",
+          "component": "Copilot",
+          "message": "Max width differs"
+        },
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "100vh",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "90vh",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [
+        {
+          "property": "gap",
+          "figmaValue": "0px",
+          "codeValue": "6px",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Gap differs by 6px"
+        },
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "84%",
+          "severity": "warning",
+          "component": "Copilot",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [
+        {
+          "property": "gap",
+          "figmaValue": "0px",
+          "codeValue": "6px",
+          "severity": "warning",
+          "component": "Loop",
+          "message": "Gap differs by 6px"
+        },
+        {
+          "property": "height",
+          "figmaValue": "64px",
+          "codeValue": "84%",
+          "severity": "warning",
+          "component": "Loop",
+          "message": "Height differs"
+        }
+      ],
+      "overallStatus": "warning"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Copilot",
+      "figmaNodeId": "I1:607;2:4662",
+      "figmaPath": "Cover > Cover > Spine > Logos > Copilot",
+      "findings": [],
+      "overallStatus": "pass"
+    },
+    {
+      "componentName": "Loop",
+      "figmaNodeId": "I1:607;2:4665",
+      "figmaPath": "Cover > Cover > Spine > Logos > Collab > Loop",
+      "findings": [],
+      "overallStatus": "pass"
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 9,
+    "info": 1,
+    "passes": 0
+  },
+  "codeFiles": [
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentDebugView/BriefsAgentDebugView.strings.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentDebugView/BriefsAgentDebugView.styles.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentDebugView/BriefsAgentDebugView.props.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/EntityDrawer/EntityDrawer.strings.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/EntityDrawer/EntityDrawer.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/store/entityDrawerStore.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsEntityCard/BriefsEntityCard.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentView.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentView.utils.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentDebugView/BriefsAgentDebugView.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentView.strings.ts",
+    "/midgard/packages/scc-react-feature-flags/src/defaultFeatureFlags.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.styles.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/.eslintrc.js",
+    "/midgard/packages/m365-copilot-shared-context-test-data/src/defaultFeatureFlags.testdata.ts",
+    "/midgard/packages/scc-types/src/featureFlags/SCCFeatureFlags.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.props.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/jest.config.js",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.strings.ts",
+    "/midgard/packages/m365-chat-components/src/components/Agents/Radar/RadarAgentPage.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.utils.test.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.utils.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.strings.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/BriefsAgentView/BriefsAgentView.styles.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/index.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/index.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/DraftEmailEditor/DraftEmailEditor.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.utils.test.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/LoopCodeBlockPreview/LoopCodeBlockPreview.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/index.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent/src/components/EntityDrawer/EntityDrawer.styles.ts",
+    "/midgard/packages/m365-chat-components/src/components/Agents/Radar/BriefsLoopIntegrationProvider.tsx",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.mockHtml.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/context/LoopIntegrationContext.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.utils.ts",
+    "/midgard/packages/scc-react-copilot-briefs-agent-loop/src/components/VisualizeEntityButton/VisualizeEntityButton.props.ts"
+  ],
+  "aiSummaryStatus": "completed",
+  "aiSummary": "I'll perform a comprehensive design integrity review for PR #4927651 against the Figma design. Let me start by running the mechanical analysis and gathering all necessary information.\n\nThe mechanical analysis timed out. Let me proceed with gathering the code and design information manually, then I'll perform the analysis.\n\nBased on the summary, I can see that the Figma URL provided only contains a \"Cover\" page with no actual UI design specifications. Let me generate a report explaining this situation and post it to the PR.\n\nI've completed the design review assessment. Here's what happened:\n\n**Summary:** The provided Figma URL contains only a \"Cover\" page with no actual UI design specifications (no colors, typography, spacing, components, or design tokens). Without design specifications to compare against, a meaningful design integrity review cannot be performed.\n\n**Actions taken:**\n- ✅ **Report saved locally** to `reports/review-PR4927651-2026-03-09T12-20-12.md`\n- ❌ **PR comment failed** (401 authentication error - this may be a permissions issue with the Azure DevOps API)\n\n**The report explains:**\n1. The Figma file lacks the necessary design specifications\n2. What would be needed to complete a design review\n3. Next steps for the PR author (provide correct Figma URL or confirm if design review is not needed)\n\nSince this PR adds HTML rendering support to Copilot Briefs and modified 29 UI-related files, it's likely that either:\n- The wrong Figma URL was provided\n- The design hasn't been documented in Figma yet\n- This is purely functional work that doesn't require design review\n\nThe PR author should provide the correct Figma URL if design review is needed, or confirm that this PR doesn't require visual design review.\n\n"
+}

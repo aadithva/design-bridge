@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Filter, Search, FileText, GitPullRequest, Percent, Layers } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { Filter, Search, FileText, GitPullRequest, Percent, Layers, Loader2 } from 'lucide-react';
 import { Select } from '../components/Select';
 import { TeamSwitcher } from '../components/TeamSwitcher';
 import { DiscoverTable } from '../components/DiscoverTable';
@@ -7,7 +8,8 @@ import { useDiscover } from '../lib/DiscoverContext';
 import type { FigmaSearchResult } from '../types';
 
 export function DiscoverPage() {
-  const { files, setFiles, fileMatchMap } = useDiscover();
+  const navigate = useNavigate();
+  const { files, setFiles, fileMatchMap, pendingAnalyses } = useDiscover();
   const [loading, setLoading] = useState(files.length === 0);
   const [error, setError] = useState('');
   const [projectFilter, setProjectFilter] = useState('all');
@@ -68,7 +70,22 @@ export function DiscoverPage() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-xs font-semibold tracking-widest uppercase text-ink-secondary">Discover</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-xs font-semibold tracking-widest uppercase text-ink-secondary">Discover</h2>
+          {(() => {
+            const runningCount = pendingAnalyses.filter(p => p.status === 'running').length;
+            if (runningCount === 0) return null;
+            return (
+              <button
+                onClick={() => navigate('/reports')}
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-accent-dim border border-accent/20 text-accent-bright text-[10px] font-medium tracking-wider hover:bg-accent/20 transition-colors"
+              >
+                <Loader2 className="h-2.5 w-2.5 animate-spin" />
+                {runningCount} running
+              </button>
+            );
+          })()}
+        </div>
         <TeamSwitcher onFilesLoaded={handleFilesLoaded} onError={handleError} />
       </div>
 

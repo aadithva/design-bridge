@@ -15,7 +15,7 @@ function formatElapsed(startedAt: string): string {
 
 export function ReportsPage() {
   const navigate = useNavigate();
-  const { pendingAnalyses, clearPending } = useDiscover();
+  const { pendingAnalyses, clearPending, clearAllCompleted } = useDiscover();
   const [analyses, setAnalyses] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -28,21 +28,14 @@ export function ReportsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const hasPending = pendingAnalyses.some(p => p.status === 'running' || (p.status === 'completed' && p.result));
   useEffect(() => {
-    const completed = pendingAnalyses.find(p => p.status === 'completed' && p.result);
-    if (completed?.result) {
-      clearPending(completed.tempId);
-      navigate(`/analysis/${completed.result.id}`);
-    }
-  }, [pendingAnalyses]);
-
-  const hasPending = pendingAnalyses.some(p => p.status === 'running');
-  useEffect(() => {
-    if (!hasPending) return;
+    if (!pendingAnalyses.some(p => p.status === 'running')) return;
     const id = setInterval(() => setTick(t => t + 1), 1000);
     return () => clearInterval(id);
-  }, [hasPending]);
+  }, [pendingAnalyses]);
   const failedPending = pendingAnalyses.filter(p => p.status === 'failed');
+  const hasCompleted = pendingAnalyses.some(p => p.status === 'completed' && p.result);
 
   if (loading && !hasPending) {
     return (
@@ -73,7 +66,15 @@ export function ReportsPage() {
         </div>
       ))}
 
-      {hasPending && (
+      {!hasPending && analyses.length === 0 && !error && (
+        <div className="text-center py-20 text-ink-muted">
+          <FileText className="h-8 w-8 mx-auto mb-3 opacity-30" />
+          <p className="text-xs">No analysis reports yet.</p>
+          <p className="text-[10px] mt-1 text-ink-faint">Run an analysis from Discover.</p>
+        </div>
+      )}
+
+      {(hasPending || analyses.length > 0) && (
         <div className="rounded bg-panel-surface border border-border overflow-hidden">
           <table className="w-full text-xs">
             <thead>
@@ -108,32 +109,34 @@ export function ReportsPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {analyses.length === 0 && !hasPending && !error && (
-        <div className="text-center py-20 text-ink-muted">
-          <FileText className="h-8 w-8 mx-auto mb-3 opacity-30" />
-          <p className="text-xs">No analysis reports yet.</p>
-          <p className="text-[10px] mt-1 text-ink-faint">Run an analysis from Discover.</p>
-        </div>
-      )}
-
-      {analyses.length > 0 && (
-        <div className="rounded bg-panel-surface border border-border overflow-hidden">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="text-left text-[10px] text-ink-muted tracking-widest uppercase border-b border-border">
-                <th className="px-5 py-3 font-medium">PR</th>
-                <th className="px-5 py-3 font-medium">Figma</th>
-                <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium">Findings</th>
-                <th className="px-5 py-3 font-medium">Date</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-subtle">
+              {pendingAnalyses.filter(p => p.status === 'completed' && p.result).map(p => (
+                <tr key={p.tempId} className="bg-sev-pass/5">
+                  <td className="px-5 py-3">
+                    <div className="font-medium text-ink">{p.prTitle}</div>
+                    <div className="text-[10px] text-ink-muted mt-0.5">PR #{p.prId}</div>
+                  </td>
+                  <td className="px-5 py-3 text-ink-secondary">{p.figmaFileName}</td>
+                  <td className="px-5 py-3">
+                    <span className="inline-flex items-center gap-1 text-sev-pass bg-sev-pass/10 px-2 py-0.5 rounded text-[10px] font-medium tracking-wider uppercase border border-sev-pass/20">
+                      <CheckCircle2 className="h-3 w-3" /> Done
+                    </span>
+                  </td>
+                  <td className="px-5 py-3">
+                    <button
+                      onClick={() => {
+                        clearPending(p.tempId);
+                        navigate(`/analysis/${p.result!.id}`);
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 text-[10px] tracking-wider uppercase rounded bg-accent/20 text-accent-bright hover:bg-accent/30 transition-colors font-medium"
+                    >
+                      View
+                    </button>
+                  </td>
+                  <td className="px-5 py-3 text-ink-muted">
+                    {new Date(p.startedAt).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
               {analyses.map(a => (
                 <tr
                   key={a.id}
@@ -191,6 +194,16 @@ export function ReportsPage() {
               ))}
             </tbody>
           </table>
+          {hasCompleted && (
+            <div className="px-5 py-2 border-t border-border-subtle">
+              <button
+                onClick={clearAllCompleted}
+                className="text-[10px] text-ink-muted hover:text-ink-secondary underline tracking-wider"
+              >
+                Dismiss all completed
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

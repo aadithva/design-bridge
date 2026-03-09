@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Check, X, ArrowRight, Loader2, Layers } from 'lucide-react';
+import { Check, X, ArrowRight, Loader2 } from 'lucide-react';
 import { useSettings } from '../lib/SettingsContext';
 import { getAdoOrgUrl } from '../lib/settings';
 
@@ -102,9 +102,7 @@ export function OnboardingPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-panel-base p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="h-8 w-8 rounded bg-panel-surface border border-border flex items-center justify-center">
-          <Layers className="h-3.5 w-3.5 text-accent-bright" />
-        </div>
+        <img src="/prism-logo.png" alt="Prism" className="h-8 w-8 object-contain" />
         <h1 className="text-lg font-semibold tracking-widest uppercase text-ink">Prism</h1>
       </div>
       <div className="w-48 prism-bar rounded-full mb-6" />

@@ -6,6 +6,7 @@ import type { FigmaSearchResult, PRMatchResult, AnalysisResult } from '../types'
 
 export interface PendingAnalysis {
   tempId: string;
+  figmaFileKey: string;
   figmaFileName: string;
   prTitle: string;
   prId: number;
@@ -41,6 +42,7 @@ interface DiscoverContextValue {
   pendingAnalyses: PendingAnalysis[];
   startAnalysis: (file: FigmaSearchResult, pr: PRMatchResult) => string;
   clearPending: (tempId: string) => void;
+  clearAllCompleted: () => void;
 }
 
 const DiscoverContext = createContext<DiscoverContextValue | null>(null);
@@ -48,16 +50,135 @@ const DiscoverContext = createContext<DiscoverContextValue | null>(null);
 const AI_POLL_INTERVAL_MS = 3000;
 const AI_POLL_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutes
 
+let tempIdCounter = 0;
+
+// --- localStorage cache helpers ---
+const LS_KEY = 'prism_discover_cache';
+const LS_TTL = 10 * 60 * 1000; // 10 minutes
+
+interface CachedDiscoverState {
+  timestamp: number;
+  selectedTeam: string;
+  cacheWarmed: boolean;
+  fileMatchMap: Array<[string, PRMatchResult[]]>;
+  teamFilesCache: Array<[string, FigmaSearchResult[]]>;
+  overrideMap: Array<[string, PRMatchResult]>;
+}
+
+function saveToLocalStorage(state: {
+  selectedTeam: string;
+  cacheWarmed: boolean;
+  fileMatchMap: Map<string, PRMatchResult[]>;
+  teamFilesCache: Map<string, FigmaSearchResult[]>;
+  overrideMap: Map<string, PRMatchResult>;
+}) {
+  try {
+    const cached: CachedDiscoverState = {
+      timestamp: Date.now(),
+      selectedTeam: state.selectedTeam,
+      cacheWarmed: state.cacheWarmed,
+      fileMatchMap: [...state.fileMatchMap.entries()],
+      teamFilesCache: [...state.teamFilesCache.entries()],
+      overrideMap: [...state.overrideMap.entries()],
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(cached));
+  } catch { /* quota exceeded or other LS error — non-fatal */ }
+}
+
+function loadFromLocalStorage(): CachedDiscoverState | null {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return null;
+    const cached: CachedDiscoverState = JSON.parse(raw);
+    if (Date.now() - cached.timestamp > LS_TTL) {
+      localStorage.removeItem(LS_KEY);
+      return null;
+    }
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+// --- Override persistence via API ---
+async function loadOverridesFromServer(teamId: string): Promise<Map<string, PRMatchResult>> {
+  try {
+    const resp = await fetch(`/api/discover/overrides?team=${encodeURIComponent(teamId)}`);
+    if (!resp.ok) return new Map();
+    const data = await resp.json();
+    if (data.overrides && typeof data.overrides === 'object') {
+      return new Map(Object.entries(data.overrides) as Array<[string, PRMatchResult]>);
+    }
+  } catch { /* non-fatal */ }
+  return new Map();
+}
+
+async function saveOverridesToServer(teamId: string, overrides: Map<string, PRMatchResult>): Promise<void> {
+  try {
+    await fetch('/api/discover/overrides', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        team: teamId,
+        overrides: Object.fromEntries(overrides),
+      }),
+    });
+  } catch { /* non-fatal */ }
+}
+
 export function DiscoverProvider({ children }: { children: ReactNode }) {
   const { settings } = useSettings();
+
+  // Hydrate initial state from localStorage
+  const cachedState = useRef(loadFromLocalStorage());
+  const initialCache = cachedState.current;
+
   const [files, setFiles] = useState<FigmaSearchResult[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState('');
-  const [teamFilesCache, setTeamFilesCache] = useState<Map<string, FigmaSearchResult[]>>(new Map());
-  const [fileMatchMap, setFileMatchMap] = useState<Map<string, PRMatchResult[]>>(new Map());
-  const [cacheWarmed, setCacheWarmed] = useState(false);
-  const [overrideMap, setOverrideMap] = useState<Map<string, PRMatchResult>>(new Map());
+  const [selectedTeam, setSelectedTeam] = useState(initialCache?.selectedTeam || '');
+  const [teamFilesCache, setTeamFilesCache] = useState<Map<string, FigmaSearchResult[]>>(
+    initialCache?.teamFilesCache ? new Map(initialCache.teamFilesCache) : new Map(),
+  );
+  const [fileMatchMap, setFileMatchMap] = useState<Map<string, PRMatchResult[]>>(
+    initialCache?.fileMatchMap ? new Map(initialCache.fileMatchMap) : new Map(),
+  );
+  const [cacheWarmed, setCacheWarmed] = useState(initialCache?.cacheWarmed || false);
+  const [overrideMap, setOverrideMap] = useState<Map<string, PRMatchResult>>(
+    initialCache?.overrideMap ? new Map(initialCache.overrideMap) : new Map(),
+  );
   const [pendingAnalyses, setPendingAnalyses] = useState<PendingAnalysis[]>([]);
   const pollIntervalsRef = useRef<Map<string, ReturnType<typeof setInterval>>>(new Map());
+
+  // Load overrides from Supabase on mount (merge with any localStorage overrides)
+  const overridesLoadedRef = useRef(false);
+  useEffect(() => {
+    if (overridesLoadedRef.current || !selectedTeam) return;
+    overridesLoadedRef.current = true;
+    loadOverridesFromServer(selectedTeam).then(serverOverrides => {
+      if (serverOverrides.size > 0) {
+        setOverrideMap(prev => {
+          const merged = new Map(serverOverrides);
+          // Local overrides win over server (more recent)
+          for (const [k, v] of prev) merged.set(k, v);
+          return merged;
+        });
+      }
+    });
+  }, [selectedTeam]);
+
+  // Persist state to localStorage on changes
+  useEffect(() => {
+    saveToLocalStorage({ selectedTeam, cacheWarmed, fileMatchMap, teamFilesCache, overrideMap });
+  }, [selectedTeam, cacheWarmed, fileMatchMap, teamFilesCache, overrideMap]);
+
+  // Persist overrides to Supabase when they change
+  const prevOverrideRef = useRef(overrideMap);
+  useEffect(() => {
+    if (prevOverrideRef.current === overrideMap) return;
+    prevOverrideRef.current = overrideMap;
+    if (selectedTeam && overrideMap.size > 0) {
+      saveOverridesToServer(selectedTeam, overrideMap);
+    }
+  }, [overrideMap, selectedTeam]);
 
   // Cleanup all poll intervals on unmount
   useEffect(() => {
@@ -101,9 +222,10 @@ export function DiscoverProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const startAnalysis = useCallback((file: FigmaSearchResult, pr: PRMatchResult): string => {
-    const tempId = `pending-${Date.now()}`;
+    const tempId = `pending-${Date.now()}-${tempIdCounter++}`;
     const pending: PendingAnalysis = {
       tempId,
+      figmaFileKey: file.fileKey,
       figmaFileName: file.name,
       prTitle: pr.title,
       prId: pr.pullRequestId,
@@ -180,6 +302,10 @@ export function DiscoverProvider({ children }: { children: ReactNode }) {
     setPendingAnalyses(prev => prev.filter(p => p.tempId !== tempId));
   }, []);
 
+  const clearAllCompleted = useCallback(() => {
+    setPendingAnalyses(prev => prev.filter(p => p.status === 'running'));
+  }, []);
+
   return (
     <DiscoverContext.Provider
       value={{
@@ -189,7 +315,7 @@ export function DiscoverProvider({ children }: { children: ReactNode }) {
         fileMatchMap, setFileMatchMap,
         cacheWarmed, setCacheWarmed,
         overrideMap, setOverrideMap,
-        pendingAnalyses, startAnalysis, clearPending,
+        pendingAnalyses, startAnalysis, clearPending, clearAllCompleted,
       }}
     >
       {children}

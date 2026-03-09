@@ -13,6 +13,24 @@ export class FigmaClient {
       headers: { 'X-Figma-Token': apiToken },
       timeout: 120_000,
     });
+
+    // Surface Figma API error details instead of generic Axios messages
+    this.http.interceptors.response.use(
+      res => res,
+      (err) => {
+        if (err.response) {
+          const data = err.response.data;
+          const detail = typeof data === 'string' ? data
+            : data?.err || data?.message || data?.error || JSON.stringify(data);
+          const wrapped = new Error(`Figma API ${err.response.status}: ${detail}`);
+          // Preserve status and code for retry logic in getAllTeamFiles
+          (wrapped as any).response = { status: err.response.status };
+          (wrapped as any).code = err.code;
+          throw wrapped;
+        }
+        throw err; // network error, timeout, etc. — keep original
+      },
+    );
   }
 
   /** Get file metadata — uses depth param to avoid fetching entire tree */

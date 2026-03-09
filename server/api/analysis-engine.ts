@@ -22,7 +22,7 @@ export function parseFigmaUrl(url: string): { fileKey: string; nodeId?: string }
   const fileKey = fileKeyMatch[1];
   let nodeId: string | undefined;
   const nodeIdMatch = url.match(/[?&]node-id=([^&#\s]+)/);
-  if (nodeIdMatch) nodeId = decodeURIComponent(nodeIdMatch[1]).replace('-', ':');
+  if (nodeIdMatch) nodeId = decodeURIComponent(nodeIdMatch[1]).replaceAll('-', ':');
   return { fileKey, nodeId };
 }
 
@@ -183,30 +183,34 @@ export async function runAnalysis(params: {
     let figmaNode: any;
     let pageName: string;
 
-    if (nodeId) {
-      const nodesData = await figmaClient.getFileNodes(fileKey, [nodeId]);
-      const nodeData = nodesData.nodes?.[nodeId];
-      if (!nodeData?.document) throw new Error(`Figma node ${nodeId} not found`);
-      figmaNode = nodeData.document;
-      pageName = figmaNode.name;
-    } else {
-      const file = await figmaClient.getFile(fileKey, 2);
-      const porPage = detectPorPage(file.document);
-      if (porPage) {
-        // Re-fetch the POR page with full depth via getFileNodes
-        const nodesData = await figmaClient.getFileNodes(fileKey, [porPage.pageId]);
-        const nodeData = nodesData.nodes?.[porPage.pageId];
-        if (nodeData?.document) {
-          figmaNode = nodeData.document;
-          pageName = porPage.pageName;
+    try {
+      if (nodeId) {
+        const nodesData = await figmaClient.getFileNodes(fileKey, [nodeId]);
+        const nodeData = nodesData.nodes?.[nodeId];
+        if (!nodeData?.document) throw new Error(`Figma node ${nodeId} not found`);
+        figmaNode = nodeData.document;
+        pageName = figmaNode.name;
+      } else {
+        const file = await figmaClient.getFile(fileKey, 2);
+        const porPage = detectPorPage(file.document);
+        if (porPage) {
+          // Re-fetch the POR page with full depth via getFileNodes
+          const nodesData = await figmaClient.getFileNodes(fileKey, [porPage.pageId]);
+          const nodeData = nodesData.nodes?.[porPage.pageId];
+          if (nodeData?.document) {
+            figmaNode = nodeData.document;
+            pageName = porPage.pageName;
+          } else {
+            figmaNode = file.document;
+            pageName = file.name;
+          }
         } else {
           figmaNode = file.document;
           pageName = file.name;
         }
-      } else {
-        figmaNode = file.document;
-        pageName = file.name;
       }
+    } catch (err: any) {
+      throw new Error(`Figma fetch failed: ${err.message}`);
     }
 
     // Step 2: Fetch full file content from PR
@@ -251,6 +255,7 @@ export async function runAnalysis(params: {
       codeFiles: codeFiles.map(f => f.path),
     };
   } catch (err: any) {
+    console.error(`[runAnalysis] Analysis failed for ${params.figmaUrl}:`, err.message);
     return {
       id,
       status: 'failed',

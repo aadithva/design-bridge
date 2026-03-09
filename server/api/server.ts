@@ -30,6 +30,7 @@ import type { AnalysisResult } from './types.js';
 import {
   FIGMA_TEAM_IDS, FIGMA_TEAM_NAMES, ADO_REPO_NAME, ADO_ORG_URL, ADO_PROJECT,
   PORT, STORAGE_BACKEND, STORAGE_DIR, AZURE_STORAGE_CONNECTION_STRING,
+  SUPABASE_URL, SUPABASE_SERVICE_KEY,
   WEBHOOK_ADO_PAT, WEBHOOK_FIGMA_PAT,
 } from './config.js';
 import { spawnAgencyReview, saveReport } from '../services/agency/agency-runner.js';
@@ -52,6 +53,13 @@ async function createStorageProviders(): Promise<{
   analysisStore: StorageProvider<AnalysisResult>;
   reviewStore: StorageProvider<ReviewResult>;
 }> {
+  if (STORAGE_BACKEND === 'supabase' && SUPABASE_URL && SUPABASE_SERVICE_KEY) {
+    const { SupabaseProvider } = await import('./storage/supabase-provider.js');
+    return {
+      analysisStore: new SupabaseProvider<AnalysisResult>(SUPABASE_URL, SUPABASE_SERVICE_KEY, 'analyses'),
+      reviewStore: new SupabaseProvider<ReviewResult>(SUPABASE_URL, SUPABASE_SERVICE_KEY, 'reviews'),
+    };
+  }
   if (STORAGE_BACKEND === 'azure-table' && AZURE_STORAGE_CONNECTION_STRING) {
     const { AzureTableProvider } = await import('./storage/azure-table-provider.js');
     return {
@@ -850,7 +858,8 @@ async function boot() {
         }
       }
     } catch (err: any) {
-      console.error('Analyze error:', err);
+      console.error('Analyze error:', err.message);
+      console.error('Analyze error stack:', err.stack);
       res.status(500).json({ error: err.message || 'Analysis failed' });
     }
   });
@@ -932,6 +941,48 @@ async function boot() {
     } catch (err: any) {
       console.error('Retry AI error:', err);
       res.status(500).json({ error: err.message || 'Retry failed' });
+    }
+  });
+
+  // --- Override persistence (Supabase-backed if available, else in-memory) ---
+  const overrideStore = (STORAGE_BACKEND === 'supabase' && SUPABASE_URL && SUPABASE_SERVICE_KEY)
+    ? null  // lazy-init below
+    : new MemoryProvider<Record<string, any>>();
+
+  let overrideSupabase: StorageProvider<Record<string, any>> | null = null;
+  async function getOverrideStore(): Promise<StorageProvider<Record<string, any>>> {
+    if (overrideStore) return overrideStore;
+    if (!overrideSupabase) {
+      const { SupabaseProvider } = await import('./storage/supabase-provider.js');
+      overrideSupabase = new SupabaseProvider<Record<string, any>>(SUPABASE_URL, SUPABASE_SERVICE_KEY, 'overrides');
+    }
+    return overrideSupabase;
+  }
+
+  // GET /api/discover/overrides?team=<teamId>
+  app.get('/api/discover/overrides', async (req, res) => {
+    try {
+      const team = (req.query.team as string) || 'default';
+      const store = await getOverrideStore();
+      const data = await store.get(team);
+      res.json({ overrides: data || {} });
+    } catch (err: any) {
+      console.error('Load overrides error:', err);
+      res.json({ overrides: {} });
+    }
+  });
+
+  // POST /api/discover/overrides — { team, overrides }
+  app.post('/api/discover/overrides', async (req, res) => {
+    try {
+      const { team, overrides } = req.body;
+      const key = team || 'default';
+      const store = await getOverrideStore();
+      await store.set(key, overrides || {});
+      res.json({ ok: true });
+    } catch (err: any) {
+      console.error('Save overrides error:', err);
+      res.status(500).json({ error: err.message || 'Failed to save overrides' });
     }
   });
 
