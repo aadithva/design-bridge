@@ -1,8 +1,8 @@
-# Design Review Bot — Architecture Document
+# Prism — Architecture Document
 
 ## 1. Overview
 
-The Design Review Bot is an automated design integrity review system that compares **Figma designs** against **Azure DevOps (ADO) pull request code changes**. It detects discrepancies in spacing, typography, colors, border radius, layout, and component usage, then produces structured, component-by-component review reports.
+Prism is an automated design integrity review system that compares **Figma designs** against **Azure DevOps (ADO) pull request code changes**. It detects discrepancies in spacing, typography, colors, border radius, layout, and component usage, then produces structured, component-by-component review reports.
 
 The system is built for teams working with **Fluent UI (React)** and operates in two modes:
 
@@ -68,14 +68,26 @@ Both modes share the same core service modules and produce the same comparison o
 ## 3. Project Structure
 
 ```
-design-review-bot/
-├── src/
+prism/
+├── server/                                     # Backend (TypeScript, Express, MCP)
 │   ├── mcp-server.ts                          # MCP server entry point (stdio transport)
 │   ├── api/
-│   │   └── server.ts                          # Express API server (web mode)
+│   │   ├── server.ts                          # Express API server (web mode)
+│   │   ├── config.ts                          # Environment config (storage backend, etc.)
+│   │   ├── analysis-engine.ts                 # Core analysis orchestration
+│   │   ├── types.ts                           # API TypeScript types
+│   │   ├── routes/
+│   │   │   ├── mcp.ts                         # MCP-related API routes
+│   │   │   └── webhook.ts                     # Webhook handler for automated reviews
+│   │   └── storage/
+│   │       ├── types.ts                       # Storage provider interface
+│   │       ├── file-provider.ts               # ✅ File-based JSON storage (default)
+│   │       ├── memory-provider.ts             # In-memory storage (testing)
+│   │       └── azure-table-provider.ts        # Azure Table Storage (cloud)
 │   ├── tools/
 │   │   ├── figma-tools.ts                     # MCP tool registrations (Figma)
-│   │   └── pr-tools.ts                        # MCP tool registrations (ADO/PR)
+│   │   ├── pr-tools.ts                        # MCP tool registrations (ADO/PR)
+│   │   └── analysis-tools.ts                  # Analysis tool registrations
 │   ├── services/
 │   │   ├── figma/
 │   │   │   ├── figma-client.ts                # Figma REST API client
@@ -83,10 +95,13 @@ design-review-bot/
 │   │   │   ├── design-token-extractor.ts      # Extract tokens from Figma node tree
 │   │   │   ├── por-page-detector.ts           # Heuristic POR/Redlines page detection
 │   │   │   ├── scenario-enumerator.ts         # Catalog components/variants on a page
-│   │   │   └── frame-exporter.ts              # Export frames as PNG images
+│   │   │   ├── frame-exporter.ts              # Export frames as PNG images
+│   │   │   └── text-extractor.ts              # Extract text content from Figma nodes
 │   │   ├── ado/
 │   │   │   ├── pr-fetcher.ts                  # ADO Git API — PR info, diffs, file content
 │   │   │   ├── comment-poster.ts              # Idempotent PR commenting
+│   │   │   ├── status-poster.ts               # PR status updates
+│   │   │   ├── commit-search.ts               # Search commits for context
 │   │   │   └── discovery-service.ts           # List projects/repos, find UI-touching PRs
 │   │   ├── code-analysis/
 │   │   │   ├── diff-parser.ts                 # Parse unified diffs, filter to UI files
@@ -95,31 +110,51 @@ design-review-bot/
 │   │   │   ├── component-matcher.ts           # Core Figma-to-Code comparison engine
 │   │   │   └── completeness-checker.ts        # Bidirectional coverage verification
 │   │   ├── matching/
-│   │   │   └── craft-figma-matcher.ts         # Fuzzy match PRs to Figma files
+│   │   │   ├── craft-figma-matcher.ts         # Fuzzy match PRs to Figma files
+│   │   │   └── content-matcher.ts             # Content-based matching
+│   │   ├── agency/
+│   │   │   └── agency-runner.ts               # Agency CLI integration
 │   │   └── pr-description-parser.ts           # Extract Figma URLs from PR descriptions
 │   └── test-*.ts                              # Various test/debug scripts
-├── web/
+├── client/                                     # Frontend (React + Fluent UI v9)
 │   ├── index.html                             # Vite HTML entry
 │   ├── vite.config.ts                         # Vite config (proxy /api → 3001)
 │   ├── package.json                           # React 19, Fluent UI v9, Vite 7
 │   └── src/
 │       ├── main.tsx                           # React entry (FluentProvider)
-│       ├── App.tsx                            # Main app shell with tab navigation
 │       ├── types.ts                           # Frontend TypeScript types
-│       └── components/
-│           ├── ReviewForm.tsx                 # Figma URL + PR ID input form
-│           ├── ReviewReport.tsx               # Component-by-component result display
-│           ├── SettingsPanel.tsx              # PAT configuration + validation
-│           ├── FigmaSearch.tsx                # Search Figma files by name
-│           ├── ScenarioEnumerator.tsx         # Visualize Figma page structure as tree
-│           └── CraftPRList.tsx                # Discover Figma files + auto-match to PRs
+│       ├── index.css                          # Global styles
+│       ├── components/
+│       │   ├── AnalysisReport.tsx             # Component-by-component result display
+│       │   ├── AISummaryPanel.tsx             # AI-generated summary panel
+│       │   ├── DiscoverTable.tsx              # Discovery results table
+│       │   ├── Layout.tsx                     # App shell layout
+│       │   ├── RequireSettings.tsx            # Settings gate component
+│       │   ├── Select.tsx                     # Custom select component
+│       │   ├── SettingsPanel.tsx              # PAT configuration + validation
+│       │   ├── SeverityBadge.tsx              # Severity indicator badges
+│       │   └── TeamSwitcher.tsx               # Team context switcher
+│       ├── pages/
+│       │   ├── AnalysisReportPage.tsx         # Analysis report view
+│       │   ├── DiscoverPage.tsx               # Discovery + auto-match view
+│       │   ├── OnboardingPage.tsx             # First-time setup flow
+│       │   ├── ReportsPage.tsx                # Report history view
+│       │   └── SettingsPage.tsx               # Settings management
+│       └── lib/
+│           ├── api.ts                         # API client functions
+│           ├── settings.ts                    # Settings persistence
+│           ├── DiscoverContext.tsx             # Discovery state context
+│           └── SettingsContext.tsx             # Settings state context
 ├── agent/
-│   ├── design-review-bot.md                   # AI agent system prompt (7-step workflow)
+│   ├── prism-agent.md                         # AI agent system prompt (7-step workflow)
 │   └── mcp-config.json                        # MCP server config template
 ├── bin/
 │   └── run-review.sh                          # Shell script to build + launch agent
+├── data/                                       # Persistent storage (JSON files, gitignored)
 ├── reports/                                   # Generated review reports (markdown)
 ├── dist/                                      # Compiled TypeScript output
+├── docker-compose.yml                         # One-command startup with volumes
+├── Dockerfile                                 # Multi-stage build (server + client)
 ├── package.json                               # Root package (Express, MCP SDK, etc.)
 └── tsconfig.json                              # TypeScript config (ES2022, Node16)
 ```
@@ -355,7 +390,7 @@ Both use the same word-overlap `fuzzyScore()` function and return results sorted
 
 ### How It Works
 
-The MCP server (`src/mcp-server.ts`) exposes tools over **stdio transport** using the `@modelcontextprotocol/sdk`. An AI agent (Claude) calls these tools in sequence to perform a structured review.
+The MCP server (`server/mcp-server.ts`) exposes tools over **stdio transport** using the `@modelcontextprotocol/sdk`. An AI agent (Claude) calls these tools in sequence to perform a structured review.
 
 ### Registered MCP Tools
 
@@ -384,7 +419,7 @@ The MCP server (`src/mcp-server.ts`) exposes tools over **stdio transport** usin
 
 ### Agent Workflow (7 Steps)
 
-The agent prompt (`agent/design-review-bot.md`) defines a strict 7-step workflow:
+The agent prompt (`agent/prism-agent.md`) defines a strict 7-step workflow:
 
 ```
 Step 1: get_pr_info          → Get PR title, description, extract Figma URLs
@@ -459,7 +494,7 @@ npm run dev:api    # Express API on port 3001
 npm run start      # Builds everything, serves on port 3001
 ```
 
-In production, Express serves the Vite-built static files from `web/dist/` and handles `/api/*` routes. The frontend SPA has a catch-all fallback route.
+In production, Express serves the Vite-built static files from `client/dist/` and handles `/api/*` routes. The frontend SPA has a catch-all fallback route.
 
 ### API Endpoints
 
@@ -743,7 +778,7 @@ User pastes Figma project URL
 | `parse-diff` | Unified diff parser |
 | `zod` | Schema validation for MCP tool inputs |
 
-### Frontend (`web/package.json`)
+### Frontend (`client/package.json`)
 
 | Package | Purpose |
 |---------|---------|
@@ -768,28 +803,32 @@ User pastes Figma project URL
 
 ```bash
 git clone <repo-url>
-cd design-review-bot
+cd prism
 
 # Install backend dependencies
 npm install
 
 # Install frontend dependencies
-cd web && npm install && cd ..
+cd client && npm install && cd ..
 
 # Build
 npm run build
-npm run build:web
+cd client && npx vite build && cd ..
 ```
 
 ### Running
 
 ```bash
-# Option 1: Web app (interactive)
+# Option 1: Docker Compose (recommended — one command)
+cp .env.example .env   # Edit with your credentials
+docker-compose up
+
+# Option 2: Web app (interactive, local dev)
 npm run start
 # Open http://localhost:3001
 # Go to Settings tab → enter Figma PAT and ADO PAT
 
-# Option 2: AI agent (automated)
+# Option 3: AI agent (automated)
 export AZURE_PERSONAL_ACCESS_TOKEN="..."
 export FIGMA_API_TOKEN="..."
 export ADO_ORG_URL="https://dev.azure.com/myorg"
@@ -797,6 +836,27 @@ export ADO_PROJECT="myproject"
 export ADO_REPOSITORY_ID="repo-guid"
 ./bin/run-review.sh <PR_ID> [--dry-run]
 
-# Option 3: MCP server (for custom agent integration)
+# Option 4: MCP server (for custom agent integration)
 npm run start:mcp
 ```
+
+### Storage
+
+Prism supports three storage backends, configured via the `STORAGE_BACKEND` environment variable:
+
+| Backend | Config Value | Description |
+|---------|-------------|-------------|
+| **File Storage** (default) | `file` | Persistent JSON files in `./data/`. Survives restarts, no external dependencies. |
+| **Memory Storage** | `memory` | In-process only. Data lost on restart. Useful for testing. |
+| **Azure Table Storage** | `azure-table` | For Azure cloud deployments. Requires `AZURE_STORAGE_CONNECTION_STRING`. |
+
+### Docker
+
+The project includes a multi-stage `Dockerfile` and `docker-compose.yml` for one-command deployment:
+
+```bash
+docker-compose up        # Build and start with persistent volumes
+docker-compose up -d     # Run in background
+```
+
+Named volumes (`prism-data`, `prism-reports`) ensure data and reports persist across container restarts.

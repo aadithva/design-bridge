@@ -1,8 +1,14 @@
 .git
 node_modules
 dist
+client/dist
+client/node_modules
 reports
+data
+design-review-bot
 *.md
 .env
 .env.*
 !.env.example
+.DS_Store
+.ralph

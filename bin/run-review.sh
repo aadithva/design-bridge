@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Design Review Bot — Agency Agent Runner
+# Prism — Agency Agent Runner
 # Usage: ./bin/run-review.sh <PR_ID> [--dry-run]
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -26,7 +26,7 @@ done
 
 # --- Resolve paths ---
 AGENT_DIR="${PROJECT_DIR}/agent"
-AGENT_FILE="${AGENT_DIR}/design-review-bot.md"
+AGENT_FILE="${AGENT_DIR}/prism-agent.md"
 MCP_CONFIG="${AGENT_DIR}/mcp-config.json"
 
 # Build MCP config with resolved env vars

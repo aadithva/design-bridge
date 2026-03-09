@@ -1,8 +1,10 @@
 .env
 node_modules/
 dist/
-web/dist/
+client/dist/
+client/node_modules/
 *.tsbuildinfo
 .ralph/
 reports/
-dist_backup/
+data/
+.DS_Store

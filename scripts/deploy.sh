@@ -2,12 +2,12 @@
 set -euo pipefail
 
 ACR_NAME="${ACR_NAME:?Set ACR_NAME to your Azure Container Registry name}"
-IMAGE_NAME="${IMAGE_NAME:-design-review-bot}"
+IMAGE_NAME="${IMAGE_NAME:-prism}"
 TAG="${TAG:-latest}"
 FULL_IMAGE="${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}"
 
 RESOURCE_GROUP="${RESOURCE_GROUP:?Set RESOURCE_GROUP}"
-CONTAINER_APP_NAME="${CONTAINER_APP_NAME:-design-review-bot}"
+CONTAINER_APP_NAME="${CONTAINER_APP_NAME:-prism}"
 
 echo "Building and pushing image..."
 bash "$(dirname "$0")/build-and-push.sh"

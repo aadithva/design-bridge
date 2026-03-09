@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ACR_NAME="${ACR_NAME:?Set ACR_NAME to your Azure Container Registry name}"
-IMAGE_NAME="${IMAGE_NAME:-design-review-bot}"
+IMAGE_NAME="${IMAGE_NAME:-prism}"
 TAG="${TAG:-latest}"
 FULL_IMAGE="${ACR_NAME}.azurecr.io/${IMAGE_NAME}:${TAG}"
 

@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ── Light mode (default) ── */
+
+  /* Surfaces — warm paper white */
+  --color-panel-base: #f5f6f8;
+  --color-panel-surface: #ffffff;
+  --color-panel-elevated: #ffffff;
+  --color-panel-hover: #eff0f3;
+  --color-panel-active: #e5e7eb;
+  --color-panel-highlight: #f0f1f4;
+
+  /* Text — four-level hierarchy, near-black primary */
+  --color-ink: #0a0a0a;
+  --color-ink-secondary: #555555;
+  --color-ink-muted: #999999;
+  --color-ink-faint: #cccccc;
+
+  /* Accent — pure black */
+  --color-accent: #1a1a1a;
+  --color-accent-bright: #000000;
+  --color-accent-dim: rgba(0, 0, 0, 0.06);
+
+  /* Spectral severity — darker for light backgrounds */
+  --color-sev-error: #dc3545;
+  --color-sev-warning: #b8860b;
+  --color-sev-info: #0969da;
+  --color-sev-pass: #1a7f37;
+
+  /* Borders — black at low opacity */
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-border-emphasis: rgba(0, 0, 0, 0.15);
+
+  /* Shadows — soft gray for light mode */
+  --shadow-soft-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.03);
+  --shadow-soft: 0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-soft-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.04);
+  --shadow-soft-lg: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 0, 0, 0.03);
+}
+
+/* ── Dark mode — pure black, no navy ── */
+[data-theme="dark"] {
+  --color-panel-base: #09090b;
+  --color-panel-surface: #131316;
+  --color-panel-elevated: #1a1a1e;
+  --color-panel-hover: #222226;
+  --color-panel-active: #2a2a2f;
+  --color-panel-highlight: #18181c;
+
+  --color-ink: #e5e5e5;
+  --color-ink-secondary: #999999;
+  --color-ink-muted: #666666;
+  --color-ink-faint: #3a3a3f;
+
+  --color-accent: #b0b0b0;
+  --color-accent-bright: #e5e5e5;
+  --color-accent-dim: rgba(255, 255, 255, 0.07);
+
+  --color-sev-error: #e5534b;
+  --color-sev-warning: #d4a72c;
+  --color-sev-info: #58a6ff;
+  --color-sev-pass: #3fb950;
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.04);
+  --color-border-emphasis: rgba(255, 255, 255, 0.16);
+
+  --shadow-soft-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-soft-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-soft-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  font-family: var(--font-mono);
+}
+
+body {
+  background: var(--color-panel-base);
+  color: var(--color-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Prismatic accent — the signature element.
+   Spectral gradient: stays consistent across themes. */
+.prism-bar {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    #7c3aed 0%,
+    #3b82f6 30%,
+    #06b6d4 55%,
+    #10b981 80%,
+    #eab308 100%
+  );
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .prism-bar {
+  opacity: 0.5;
+}
+
+.prism-bar-vertical {
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    #7c3aed 0%,
+    #3b82f6 30%,
+    #06b6d4 55%,
+    #10b981 80%,
+    #eab308 100%
+  );
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .prism-bar-vertical {
+  opacity: 0.5;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-ink-faint); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-muted); }
+
+/* Selection */
+::selection { background: rgba(124, 58, 237, 0.15); color: var(--color-ink); }
+[data-theme="dark"] ::selection { background: rgba(124, 58, 237, 0.25); color: var(--color-ink); }

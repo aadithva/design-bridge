@@ -1,18 +1,18 @@
 {
-  "name": "@1js/design-bridge",
+  "name": "prism",
   "version": "3.0.0",
-  "description": "Design Bridge - compare Figma designs against code changes with automated discovery and analysis",
+  "description": "Prism — AI-powered design review that compares Figma designs against code changes",
   "main": "dist/mcp-server.js",
   "bin": {
-    "design-review-mcp": "dist/mcp-server.js"
+    "prism-mcp": "dist/mcp-server.js"
   },
   "scripts": {
     "build": "tsc",
-    "build:web": "cd web && npx vite build",
+    "build:client": "cd client && npx vite build",
     "dev": "tsc --watch",
-    "dev:web": "cd web && npx vite",
+    "dev:client": "cd client && npx vite",
     "dev:api": "node dist/api/server.js",
-    "start": "npm run build && npm run build:web && node dist/api/server.js",
+    "start": "npm run build && npm run build:client && node dist/api/server.js",
     "start:mcp": "node dist/mcp-server.js",
     "test": "jest",
     "lint": "tsc --noEmit"

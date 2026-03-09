@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "${PORT:-3001}:3001"
+    env_file: .env
+    environment:
+      - STORAGE_BACKEND=file
+      - STORAGE_DIR=/app/data
+    volumes:
+      - prism-data:/app/data
+      - prism-reports:/app/reports
+    restart: unless-stopped
+
+volumes:
+  prism-data:
+    driver: local
+  prism-reports:
+    driver: local
