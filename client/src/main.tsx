@@ -10,6 +10,7 @@ import { DiscoverPage } from './pages/DiscoverPage';
 import { AnalysisReportPage } from './pages/AnalysisReportPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { ReportsPage } from './pages/ReportsPage';
+import { ReviewPage } from './pages/ReviewPage';
 import './index.css';
 
 function RootRedirect() {
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route element={<Layout />}>
             <Route element={<RequireSettings />}>
               <Route path="/discover" element={<DiscoverPage />} />
+              <Route path="/review" element={<ReviewPage />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/analysis/:id" element={<AnalysisReportPage />} />
               <Route path="/settings" element={<SettingsPage />} />

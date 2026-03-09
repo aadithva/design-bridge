@@ -1,9 +1,10 @@
-import { Compass, FileText, Settings } from 'lucide-react';
+import { Compass, FlaskConical, FileText, Settings } from 'lucide-react';
 import { NavLink, Outlet } from 'react-router';
 import { clsx } from 'clsx';
 
 const navItems = [
   { to: '/discover', label: 'DISCOVER', icon: Compass },
+  { to: '/review', label: 'REVIEW', icon: FlaskConical },
   { to: '/reports', label: 'REPORTS', icon: FileText },
   { to: '/settings', label: 'SETTINGS', icon: Settings },
 ];

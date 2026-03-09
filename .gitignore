@@ -6,5 +6,6 @@ client/node_modules/
 *.tsbuildinfo
 .ralph/
 reports/
-data/
+data/*
+!data/.gitkeep
 .DS_Store
