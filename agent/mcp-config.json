@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "design-review-mcp": {
+      "command": "node",
+      "args": ["dist/mcp-server.js"],
+      "cwd": "${PROJECT_DIR}",
+      "env": {
+        "AZURE_PERSONAL_ACCESS_TOKEN": "${AZURE_PERSONAL_ACCESS_TOKEN}",
+        "FIGMA_API_TOKEN": "${FIGMA_API_TOKEN}",
+        "ADO_ORG_URL": "${ADO_ORG_URL}",
+        "ADO_PROJECT": "${ADO_PROJECT}",
+        "ADO_REPOSITORY_ID": "${ADO_REPOSITORY_ID}",
+        "FIGMA_TEAM_ID": "${FIGMA_TEAM_ID}"
+      }
+    }
+  }
+}

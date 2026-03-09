@@ -1,0 +1,43 @@
+{
+  "name": "@1js/design-bridge",
+  "version": "3.0.0",
+  "description": "Design Bridge - compare Figma designs against code changes with automated discovery and analysis",
+  "main": "dist/mcp-server.js",
+  "bin": {
+    "design-review-mcp": "dist/mcp-server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:web": "cd web && npx vite build",
+    "dev": "tsc --watch",
+    "dev:web": "cd web && npx vite",
+    "dev:api": "node dist/api/server.js",
+    "start": "npm run build && npm run build:web && node dist/api/server.js",
+    "start:mcp": "node dist/mcp-server.js",
+    "test": "jest",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.2",
+    "@modelcontextprotocol/sdk": "^1.27.0",
+    "axios": "^1.7.0",
+    "azure-devops-node-api": "^14.1.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "p-limit": "^3.1.0",
+    "parse-diff": "^0.11.1",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.14.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
